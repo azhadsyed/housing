@@ -9,8 +9,16 @@ license = "MIT"
 python = "^3.7"
 pandas = "*"
 mysql-connector-python = "^8.0.22"
+python-craigslist = "^1.0.11"
+tqdm = "^4.54.0"
+numpy = "^1.19.4"
+pymongo = "^3.11.2"
+docopt = "^0.6.2"
 
 [tool.poetry.dev-dependencies]
+flake8 = {version = "^3.8.4", allow-prereleases = true}
+black = {version = "^20.8b1", allow-prereleases = true}
+pylint = "^2.6.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
