@@ -8,6 +8,7 @@ Options:
   -h --help   Show this screen.
   -t --today  Download listings posted today (up until now)
   -k --keep   Store the downloaded listings to cache.json
+  --fromfile  Pass in a 
 """
 
 import json
@@ -34,15 +35,13 @@ def extract(site, category, today=False):
     )
     results = cl_h.get_results(sort_by="newest", geotagged=True, include_details=True)
     results = [i for i in tqdm(results)]
-    json.dump(results, "cache.json")
+    with open("cache.json", "w") as f:
+        json.dump(results, f)
 
 
 # now retrieve the existing Craigslist ID's from the raw data collection. init s/b 0
 def load(documents):
     # on runtime, check if there's a cache
-    if exists("cache.json"):
-        with open("cache.json", "r") as f:
-            documents = json.load(f)
     myclient = pymongo.MongoClient()
     db = myclient.housing
     listings = db.listings
@@ -62,7 +61,6 @@ def load(documents):
                 match = None
             # add to the load queue if not already in db
             if not match:
-                listings.insert(listing)
                 to_load.append(listing)
     if to_load:
         job = listings.insert_many(to_load)
@@ -78,7 +76,9 @@ if __name__ == "__main__":
     if not exists("cache.json"):
         extract(arguments["CITY"], arguments["CATEGORY"], arguments["--today"])
 
-    documents = json.load("cache.json")
+    with open("cache.json", "r") as f:
+        documents = json.load(f)
+
     load(documents)
 
     if not arguments["--keep"]:
