@@ -1,2 +1,4 @@
 .vscode/
 notebooks/
+data.csv
+cache.json
