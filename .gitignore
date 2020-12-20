@@ -1,5 +1,5 @@
 .vscode/
 notebooks/
-data.csv
-cache.json
-model.joblib
+*.csv
+*.json
+*.joblib
