@@ -47,7 +47,8 @@ model.fit(X_train, y_train)
 
 data["predictions"] = model.predict(X)
 data["error"] = abs(data["predictions"] - data["price"])
-print(data.sort_values(by="error", ascending=False).head(20))
+print(data["predictions"].describe())
+print(data["error"].describe())
 
 # 4. Cache the model for downstream use
-dump(gbr, "model.joblib")
+dump(model, "model.joblib")
