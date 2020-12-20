@@ -15,7 +15,7 @@ listings = [i for i in results]
 # Step 2: Read the data from Mongo into memory (filter for training/extra columns, no garbage)
 dataframe = pd.DataFrame(listings)
 
-# Step 4: Drop garbage columns (columns not needed for either cleaning or training)
+# Step 3: Drop garbage columns (columns not needed for either cleaning or training)
 garbage = [
     "_id",
     "address",
@@ -145,12 +145,10 @@ dataframe["bathrooms"] = dataframe.apply(
 )
 
 # Step 5: drop extra columns (that were needed for cleaning, not for training)
-
 extra = ["name", "body"]
 
 dataframe.dropna(inplace=True)
 dataframe.drop(extra, axis=1, inplace=True)
 
 # Step 6: transform the training fields into a csv file
-
 dataframe.to_csv("data.csv", index=False)
