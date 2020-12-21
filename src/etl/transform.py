@@ -1,9 +1,27 @@
+"""
+transform.py is responsible for connecting to the database of Craigslist listings,
+loading the listings into memory, and transforming the raw data into a human-
+readable but algorithm-friendly csv file that can be used to train a model.
+
+Here are some definitions that apply to this project:
+
+1. Human-readable: if you gave this data to a human statistician they could conduct
+meaningful analysis
+2. Model friendly: If you used this data as an model input, you should be 
+able meaningfully train a model from it.
+3. Machine friendly: If you gave this data to a python-implementation of a 
+machine learning algorithm, it would be able to then predict on future data with-
+out throwing an error.
+
+future goals - if one part of the transform job fails, cache the data as is and 
+load it into the next runtime. On a successful run, delete the cache
+
+"""
+
 from pymongo import MongoClient
 import pandas as pd, numpy as np
 import re
 
-# future goals - if one part of the transform job fails, cache the data as is and
-# load it into the next runtime. On a successful run, delete the cache
 
 # Step 1: Connect to the database (Mongo)
 client = MongoClient()
