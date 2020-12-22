@@ -8,7 +8,7 @@ Options:
   -h --help   Show this screen.
   -t --today  Download listings posted today (up until now)
   -k --keep   Store the downloaded listings to cache.json
-  --fromfile  Pass in a 
+  --cache     Use cached data to load, rather than repinging Craigslist 
 """
 
 import json
@@ -41,7 +41,6 @@ def extract(site, category, today=False):
 
 # now retrieve the existing Craigslist ID's from the raw data collection. init s/b 0
 def load(documents):
-    # on runtime, check if there's a cache
     myclient = pymongo.MongoClient()
     db = myclient.housing
     listings = db.listings
