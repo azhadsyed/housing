@@ -1,6 +1,6 @@
 # NYC Rent Estimator App
 
-Codebase for my NYC rent estimaor app. Accepts an apartment's location, size, and amenities as inputs; outputs a listing price estimate and an ELI5 explanation of how that listing price is calculated.
+Codebase for my NYC rent estimator app. Accepts an apartment's location, size, and amenities as inputs; outputs a listing price estimate and an ELI5 explanation of how that listing price is calculated.
 
 Built in Python using Flask/Jinja, Pandas, Pymongo and Scikit-learn, and other community packages.
 
