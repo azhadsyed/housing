@@ -50,12 +50,6 @@ Deployment
 - [ ] Containerize the application
 - [ ] Deploy using DigitalOcean
 
-Flask Tests: What are all the things that need to work for this app to work?
-
-1. The model actually has to be a model
-2. Values actually validate - I thought IntegerField was implicit??
-3. Bug - Why do posts that should validate sometimes not?
-
 Mean Encoding
 
 - [ ] Implement mean-target encoding with k-fold regularization for cat. variables
