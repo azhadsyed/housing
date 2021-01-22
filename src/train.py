@@ -1,11 +1,10 @@
 """
-train.py receives a training dataset (train.csv) that contains:
+train.py receives a training dataset (data.csv) that contains:
 1. numeric and categorical values
 2. no missing values
 
 With this dataset, it trains a model that predicts the price based 
-on the feature vector. The model's accuracy gets logged when its trained,
-but isn't called to predict here, that happens in predict.py
+on the feature vector. The model's accuracy gets printed when its trained
 
 The preprocessing pipeline follows the design principles laid out here:
 https://towardsdatascience.com/custom-transformers-and-ml-data-pipelines-with-python-20ea2a7adb65
