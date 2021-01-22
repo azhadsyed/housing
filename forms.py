@@ -1,5 +1,11 @@
-from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, SelectField, BooleanField, SubmitField
+from wtforms import (
+    Form,
+    StringField,
+    IntegerField,
+    SelectField,
+    BooleanField,
+    SubmitField,
+)
 from wtforms.validators import InputRequired
 
 import json
@@ -11,10 +17,10 @@ parking_choices = options["parking"]
 housing_type_choices = options["housing type"]
 
 
-class EstimateForm(FlaskForm):
+class EstimateForm(Form):
     address = StringField("Street Address")
-    bedrooms = StringField("No. Bedrooms", [InputRequired()])
-    bathrooms = StringField("No. Bathrooms", [InputRequired()])
+    bedrooms = IntegerField("No. Bedrooms", [InputRequired()])
+    bathrooms = IntegerField("No. Bathrooms", [InputRequired()])
     housing_type = SelectField("Housing Type", choices=housing_type_choices)
     laundry = SelectField("Laundry", choices=laundry_choices)
     parking = SelectField("Parking", choices=parking_choices)
