@@ -5,7 +5,7 @@ def clean_features(array, order):
     """
     sums = {i: 0 for i in order}
 
-    for tup in case:
+    for tup in array:
         feature, contribution = tup
         onehot = feature.find("onehotencoder")  # returns -1 if substr not in str
         if onehot != -1:
@@ -28,7 +28,7 @@ def order_features(bias, features):
         ("base", bias + features["bedrooms"] + features["bathrooms"])
     )
     for k, v in features.items():
-        if k not in ["bedrooms, bathrooms"]:
+        if k not in ["bedrooms", "bathrooms"]:
             ordered_features.append((k, v))
     return ordered_features
 
