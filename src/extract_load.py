@@ -82,5 +82,3 @@ if __name__ == "__main__":
 
     if not arguments["--keep"]:
         remove("cache.json")
-
-# TODO: decouple database connection from load()

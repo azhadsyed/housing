@@ -1,7 +1,7 @@
 """
 transform.py is responsible for connecting to the database of Craigslist listings,
 loading the listings into memory, and transforming the raw data into a human-
-readable but algorithm-friendly csv file that can be used to train a model.
+readable but model-friendly csv file that can be used to train a model.
 
 Here are some definitions that apply to this project:
 
@@ -20,7 +20,7 @@ load it into the next runtime. On a successful run, delete the cache
 
 from pymongo import MongoClient
 import pandas as pd, numpy as np
-import re
+import re, json
 
 
 # Step 1: Connect to the database (Mongo)
@@ -170,3 +170,18 @@ dataframe.drop(extra, axis=1, inplace=True)
 
 # Step 6: transform the training fields into a csv file
 dataframe.to_csv("data.csv", index=False)
+
+# Step 7: cache the options from categorical variables to options.json, as well
+# as the column order excluding ID and price
+
+column_order = list(dataframe.columns)
+del column_order[:2]
+
+options = {
+    "laundry": sorted(list(dataframe.laundry.unique())),
+    "parking": sorted(list(dataframe.parking.unique())),
+    "housing type": sorted(list(dataframe.housing_type.unique())),
+    "column order": column_order,
+}
+with open("options.json", "w") as f:
+    json.dump(options, f)

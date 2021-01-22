@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% from "_formhelpers.html" import render_field %}
+
+{% block content %}
+
+Thinking about signing a lease in NYC? Enter the details below to find out how much the apartment is worth!
+<form method="POST" action="/">
+    {{ form.csrf_token }}
+    {{ render_field(form.address) }}
+    {{ render_field(form.bedrooms) }}
+    {{ render_field(form.bathrooms) }}
+    {{ render_field(form.housing_type) }}
+    {{ render_field(form.laundry) }}
+    {{ render_field(form.parking) }}
+    {{ render_field(form.is_furnished) }}
+    {{ render_field(form.no_smoking) }}
+    {{ render_field(form.wheelchair_acccess) }}
+    {{ render_field(form.ev_charging) }}
+    {{ render_field(form.cats_ok) }}
+    {{ render_field(form.dogs_ok) }}
+    {{ form.submit }}
+</form>
+
+{% if estimate %}
+This apartment is worth ${{ estimate }}.
+
+{{ contributions }}
+
+{% endif %}
+{% endblock %}

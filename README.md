@@ -33,22 +33,28 @@ Backend (2)
 
 - [x] write a CLI that accepts a sample and returns a price estimate
 - [x] write flask api endpoint that accepts parameters in body and returns a price estimate
+- [ ] get eli5 endpoint working
 
 Frontend
 
 - [x] Wireframe the UX
 - [x] Static UI layout
 - [x] feed the categories of "laundry" and "parking" through to the front-end
-- [ ] implement flask-wtf (forms)
-- [ ] get estimate button working
-- [ ] get eli5 endpoint working
-- [ ] get eli5 display working
+- [x] implement flask-wtf (forms) prediction
+- [ ] setup eli5 display
+- [ ] Style
 
 Deployment
 
 - [ ] setup cron job to update CSV and model daily
 - [ ] Containerize the application
 - [ ] Deploy using DigitalOcean
+
+Flask Tests: What are all the things that need to work for this app to work?
+
+1. The model actually has to be a model
+2. Values actually validate - I thought IntegerField was implicit??
+3. Bug - Why do posts that should validate sometimes not?
 
 Mean Encoding
 
