@@ -70,3 +70,4 @@ A/B Testing different algorithms
 Other
 
 - [ ] Visualize median price by zipcode in NYC
+- [ ] How different is a zipcode from the average of all the other touching zipcodes?
