@@ -5,3 +5,4 @@ notebooks/
 *.joblib
 __pycache__
 *.pytest_cache
+*.bat
