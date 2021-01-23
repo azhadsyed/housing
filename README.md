@@ -41,14 +41,28 @@ Frontend
 - [x] Static UI layout
 - [x] feed the categories of "laundry" and "parking" through to the front-end
 - [x] implement flask-wtf (forms) prediction
-- [ ] setup eli5 display
+- [x] setup eli5 display
+- [ ] write frontend unit tests (and maybe a functional test or two?)
 - [ ] Style
+
+Staging
+
+- [ ] Come up with a way to test the app on a copy of production data
+- [ ] Assess results and fix bugs
 
 Deployment
 
 - [ ] setup cron job to update CSV and model daily
 - [ ] Containerize the application
 - [ ] Deploy using DigitalOcean
+
+A/B Testing different algorithms
+
+- [ ] Refactor, and write tests for, the ML pipeline
+- [ ] Linear Regression, KNN, Decision Tree, Random Forest, GBR, XGBoost, Catboost
+- [ ] Geospatial Regression Algorithms
+- [ ] Build a shootout results view that goes into the math/statistic
+- [ ] Incorporate the winner
 
 Mean Encoding
 
@@ -59,13 +73,6 @@ Google Maps
 - [ ] Incorporate Google Maps Geocode data into the pipeline
 - [ ] Filter out listings outside of NYC
 - [ ] Handle zip codes that aren't in the training data
-
-A/B Testing different algorithms
-
-- [ ] Linear Regression, KNN, Decision Tree, Random Forest, GBR, XGBoost, Catboost
-- [ ] Geospatial Regression Algorithms
-- [ ] Build a shootout results view that goes into the math/statistic
-- [ ] Incorporate the winner
 
 Other
 
