@@ -6,3 +6,5 @@ notebooks/
 __pycache__
 *.pytest_cache
 *.bat
+*.coverage
+config.py

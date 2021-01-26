@@ -42,19 +42,30 @@ Frontend
 - [x] feed the categories of "laundry" and "parking" through to the front-end
 - [x] implement flask-wtf (forms) prediction
 - [x] setup eli5 display
-- [ ] write frontend unit tests (and maybe a functional test or two?)
+- [x] write frontend unit tests
 - [ ] Style
+
+Pipeline
+
+- [ ] Add Support for categorical variable "Zipcode"
+  - [ ] Choose an encoding technique that doesn't introduce insane dimensionality
+  - [ ] Find a way to handle zipcodes not present in the training data
 
 Staging
 
 - [ ] Come up with a way to test the app on a copy of production data
 - [ ] Assess results and fix bugs
+- [ ] Setup a CircleCI pipeline
 
 Deployment
 
 - [ ] setup cron job to update CSV and model daily
 - [ ] Containerize the application
 - [ ] Deploy using DigitalOcean
+
+Implementation Fixes
+
+- [ ] Refactor using App Factory and some functional tests
 
 A/B Testing different algorithms
 
