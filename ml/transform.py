@@ -27,8 +27,7 @@ import re, json
 client = MongoClient()
 db = client["housing"]
 collection = db["listings"]
-results = collection.find()
-listings = [i for i in results]
+listings = list(collection.find())
 
 # Step 2: Read the data from Mongo into memory (filter for training/extra columns, no garbage)
 dataframe = pd.DataFrame(listings)
@@ -42,7 +41,7 @@ garbage = [
     "created",
     "datetime",
     "deleted",
-    "geotag",
+    # "geotag",
     # "id",
     "images",
     "has_image",
@@ -81,14 +80,13 @@ value = {i: False for i in to_fill}
 dataframe.fillna(value, inplace=True)
 
 # 4d. In columns with categorical values, impute the mode
+categorical_features = [i for i in hashable if dataframe[i].dtype == "object"]
+[categorical_features.remove(i) for i in ["name", "body", "id"]]
+
 categorical_modes = {
-    i: dataframe[i].value_counts().index[0]
-    for i in hashable
-    if dataframe[i].dtype == "object"
+    i: dataframe[i].value_counts().index[0] for i in categorical_features
 }
 
-exclude = ["name", "body", "id"]
-[categorical_modes.pop(i) for i in exclude]
 dataframe.fillna(categorical_modes, inplace=True)
 
 # 4e. For bedrooms and bathrooms, search for missing values in 'name' and 'body' fields
@@ -130,46 +128,40 @@ def conditional_mutate(row, missing_field, source_field, pattern):
 bedroom_expression = r"(?<!\$)(\d+\.?[\d]*)[\s\-]*(?:bd|br|room|bed|bdrm|bedroom|cuarto)s*(?!\w)|bed(?:room)*s*: (\d+\.*\d*)|(\d)B\dB"
 bathroom_expression = r"(\d+\.?[\d]*)[\s\-]*(?:ba|bath|bth|bathroom|bano)s*(?!\w)|bath(?:room)*s*: (\d+\.*\d*)|\dB(\d)B"
 
-dataframe["bedrooms"] = dataframe.apply(
-    conditional_mutate,
-    missing_field="bedrooms",
-    source_field="name",
-    pattern=bedroom_expression,
-    axis=1,
-)
 
-dataframe["bedrooms"] = dataframe.apply(
-    conditional_mutate,
-    missing_field="bedrooms",
-    source_field="body",
-    pattern=bedroom_expression,
-    axis=1,
-)
+def impute_rooms(room_name, pattern):
+    dataframe[room_name] = dataframe.apply(
+        conditional_mutate,
+        missing_field=room_name,
+        source_field="name",
+        pattern=pattern,
+        axis=1,
+    )
 
-dataframe["bathrooms"] = dataframe.apply(
-    conditional_mutate,
-    missing_field="bathrooms",
-    source_field="name",
-    pattern=bathroom_expression,
-    axis=1,
-)
+    dataframe[room_name] = dataframe.apply(
+        conditional_mutate,
+        missing_field=room_name,
+        source_field="body",
+        pattern=pattern,
+        axis=1,
+    )
 
-dataframe["bathrooms"] = dataframe.apply(
-    conditional_mutate,
-    missing_field="bathrooms",
-    source_field="body",
-    pattern=bathroom_expression,
-    axis=1,
-)
+
+impute_rooms("bedrooms", bedroom_expression)
+impute_rooms("bathrooms", bathroom_expression)
+
+# unpack lat and long
+dataframe["latitude"] = dataframe["geotag"].apply(lambda x: x[0])
+dataframe["longitude"] = dataframe["geotag"].apply(lambda x: x[1])
 
 # Step 5: drop extra columns (that were needed for cleaning, not for training)
-extra = ["name", "body"]
+extra = ["name", "body", "geotag"]
 
 dataframe.dropna(inplace=True)
 dataframe.drop(extra, axis=1, inplace=True)
 
 # Step 6: transform the training fields into a csv file
-dataframe.to_csv("data.csv", index=False)
+dataframe.to_csv("data.csv", index=False)  # this filepath needs to be config
 
 # Step 7: cache the options from categorical variables to options.json, as well
 # as the column order excluding ID and price
@@ -182,6 +174,7 @@ options = {
     "parking": sorted(list(dataframe.parking.unique())),
     "housing type": sorted(list(dataframe.housing_type.unique())),
     "column order": column_order,
+    "categorical features": categorical_features,
 }
 with open("options.json", "w") as f:
     json.dump(options, f)
