@@ -39,7 +39,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 # 2. preprocess the features for training
 ct = make_column_transformer(
     (
-        OneHotEncoder(),
+        OneHotEncoder(handle_unknown="ignore"),
         categorical_features,
     ),
     remainder="passthrough",
@@ -50,35 +50,9 @@ rf = RandomForestRegressor()
 model = make_pipeline(ct, rf)
 model.fit(X_train, y_train)
 
-data["predictions"] = model.predict(X)
-data["error"] = abs(data["predictions"] - data["price"])
-print(data["error"].describe())
+predictions = model.predict(X_test)
+error = abs(predictions - y_test)
+print(error.describe())
 
-# 3.1 Testing ELI5
-test = {
-    "cats_ok": True,
-    "dogs_ok": False,
-    "housing_type": "apartment",
-    "laundry": "laundry in bldg",
-    "bedrooms": 3,
-    "bathrooms": 1,
-    "parking": "street parking",
-    "no_smoking": False,
-    "is_furnished": False,
-    "wheelchair_acccess": True,
-    "ev_charging": False,
-}
-
-testX = pd.DataFrame.from_dict({k: [v] for k, v in test.items()})
-
-from treeinterpreter import treeinterpreter as ti
-
-prediction, bias, contributions = ti.predict(
-    model.steps[-1][1], model.steps[0][1].transform(testX)
-)
-print(contributions)  # feature contributions
-print(bias)  # feature contributions
-
-
-# 4. Cache the model and list of categorical features for downstream use
+# 4. Cache the model for downstream use
 dump(model, "model.joblib")
