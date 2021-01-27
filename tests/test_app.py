@@ -6,6 +6,7 @@ from web import app
 @pytest.fixture
 def form_data():
     return {
+        "address": "397 Bridge St., Brooklyn NY",
         "cats_ok": True,
         "dogs_ok": False,
         "housing_type": "apartment",
@@ -20,8 +21,13 @@ def form_data():
     }
 
 
-def test_form_data_to_dataframe(dataframe):
+def test_form_data_to_dataframe(form_data):
+    # check that test case has same # of fields as cached column order
+    assert len(form_data.keys()) + 1 == len(app.column_order)
+
+    dataframe = app.form_data_to_dataframe(form_data)
     assert str(type(dataframe)) == "<class 'pandas.core.frame.DataFrame'>"
+    assert "latitude" in dataframe.columns and "longitude" in dataframe.columns
 
 
 @pytest.fixture
@@ -49,7 +55,7 @@ def test_clean_features(prediction):
     estimate, bias, contributions = prediction
     cleaned_features = app.clean_features(contributions, app.categorical_features)
     assert type(cleaned_features) == dict
-    assert estimate - bias + sum(cleaned_features.values()) <= 0.01
+    assert abs(estimate - bias - sum(cleaned_features.values())) <= 0.01
 
 
 @pytest.fixture
@@ -61,8 +67,8 @@ def cleaned_features(prediction):
 def test_order_features(prediction, cleaned_features):
     bias = prediction[1]
     ordered_features = app.order_features(bias, cleaned_features)
-    assert (
-        sum([i[1] for i in ordered_features]) - bias + sum(cleaned_features.values())
+    assert abs(
+        sum([i[1] for i in ordered_features]) - bias - sum(cleaned_features.values())
         <= 0.01
     )
 

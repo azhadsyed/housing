@@ -1,24 +1,22 @@
 from wtforms import (
+    BooleanField,
     Form,
-    StringField,
     IntegerField,
     SelectField,
-    BooleanField,
+    StringField,
     SubmitField,
 )
-from wtforms.validators import InputRequired
+from wtforms.validators import InputRequired, ValidationError
 
-import json
+from .config import options
 
-with open("options.json", "r") as f:
-    options = json.load(f)
 laundry_choices = options["laundry"]
 parking_choices = options["parking"]
 housing_type_choices = options["housing type"]
 
 
 class EstimateForm(Form):
-    address = StringField("Street Address")
+    address = StringField("Street Address", [InputRequired()])
     bedrooms = IntegerField("No. Bedrooms", [InputRequired()])
     bathrooms = IntegerField("No. Bathrooms", [InputRequired()])
     housing_type = SelectField("Housing Type", choices=housing_type_choices)

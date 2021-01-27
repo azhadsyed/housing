@@ -4,6 +4,7 @@ import json
 
 import pandas as pd
 from flask import Flask, render_template, request, Markup
+from geopy.geocoders import Nominatim
 from joblib import load
 from treeinterpreter import treeinterpreter as ti
 
@@ -13,19 +14,24 @@ from .forms import EstimateForm
 
 with open("options.json", "r") as f:
     options = json.load(f)
-column_order = options["column order"]  # I'm okay with this being a global...
+column_order = options["column order"]
 categorical_features = options["categorical features"]
-# but I need to couple it with the data/model better somehow...
 
 app = Flask(__name__)
 app.config.from_pyfile("config.py")
 
-# what if there are more models in circulation? Not sure this design will scale
-model = load("model.joblib")  # treat this like a black box, assume it works for now
+model = load("model.joblib")
 feature_names = model.steps[0][1].get_feature_names()
+
+geolocator = Nominatim(user_agent="nyc_rent_estimator")
 
 
 def form_data_to_dataframe(form_data):
+    if "submit" in form_data.keys():
+        del form_data["submit"]
+    location = geolocator.geocode(form_data["address"])
+    form_data["latitude"] = location.latitude
+    form_data["longitude"] = location.longitude
     dict_for_pandas = {k: [v] for k, v in form_data.items()}
     dataframe = pd.DataFrame.from_dict(dict_for_pandas)
     return dataframe[column_order]
@@ -37,7 +43,6 @@ def predict_and_unpack(model, dataframe) -> (float, float, list):
     dimensional array of feature names and floating precision contributions."""
     if len(dataframe) != 1:
         raise ValueError("dataframe cannot have more than one row.")
-
     estimate, bias, contributions = ti.predict(
         model.steps[-1][1],  # model itself -  random forest
         model.steps[0][1].transform(dataframe),  # transformed observation
@@ -71,8 +76,10 @@ def order_features(bias, features) -> list:
     ordered_features.append(
         ("base", bias + features["bedrooms"] + features["bathrooms"])
     )
+    ordered_features.append(("location", features["latitude"] + features["longitude"]))
+
     for k, v in features.items():
-        if k not in ["bedrooms", "bathrooms"]:
+        if k not in ["bedrooms", "bathrooms", "longitude", "latitude"]:
             ordered_features.append((k, v))
     return ordered_features
 
@@ -105,7 +112,7 @@ def process_form(model, form_data):
     dataframe = form_data_to_dataframe(form_data)
     estimate, bias, contributions = predict_and_unpack(model, dataframe)
     explanation = clean_and_style(bias, contributions)
-    return estimate, explanation
+    return round(estimate, 2), explanation
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -113,14 +120,13 @@ def home():
     form = EstimateForm(request.form)
     estimate, explanation = None, None
     if request.method == "POST" and form.validate():
-        del form.data["submit"]  # pylint: disable=no-member
         estimate, explanation = process_form(
             model, form.data  # pylint: disable=no-member
         )
     return render_template(
         "form.html",
         form=form,
-        estimate=round(estimate, 2),
+        estimate=estimate,
         explanation=explanation,
     )
 
