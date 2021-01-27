@@ -203,6 +203,34 @@ itsdangerous = "*"
 WTForms = "*"
 
 [[package]]
+name = "geographiclib"
+version = "1.50"
+description = "The geodesic routines from GeographicLib"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "geopy"
+version = "2.1.0"
+description = "Python Geocoding Toolbox"
+category = "main"
+optional = false
+python-versions = ">=3.5"
+
+[package.dependencies]
+geographiclib = ">=1.49,<2"
+
+[package.extras]
+aiohttp = ["aiohttp"]
+dev = ["async-generator", "flake8 (>=3.8.0,<3.9.0)", "isort (>=5.6.0,<5.7.0)", "coverage", "pytest-aiohttp", "pytest (>=3.10)", "readme-renderer", "sphinx", "sphinx-issues", "sphinx-rtd-theme (>=0.5.0)"]
+dev-docs = ["readme-renderer", "sphinx", "sphinx-issues", "sphinx-rtd-theme (>=0.5.0)"]
+dev-lint = ["async-generator", "flake8 (>=3.8.0,<3.9.0)", "isort (>=5.6.0,<5.7.0)"]
+dev-test = ["async-generator", "coverage", "pytest-aiohttp", "pytest (>=3.10)"]
+requests = ["urllib3 (>=1.24.2)", "requests (>=2.16.2)"]
+timezone = ["pytz"]
+
+[[package]]
 name = "googlemaps"
 version = "4.4.2"
 description = "Python client library for Google Maps Platform"
@@ -741,7 +769,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "e3919e086341788b4137dd9d6ebf54b808718cff10e5f6397728f067efbf41b7"
+content-hash = "cb5c12f3dd035fbdc45774c6a54efce0b09aed73c5e91e153fe02254a66b43cc"
 
 [metadata.files]
 appdirs = [
@@ -857,6 +885,14 @@ flask = [
 flask-wtf = [
     {file = "Flask-WTF-0.14.3.tar.gz", hash = "sha256:d417e3a0008b5ba583da1763e4db0f55a1269d9dd91dcc3eb3c026d3c5dbd720"},
     {file = "Flask_WTF-0.14.3-py2.py3-none-any.whl", hash = "sha256:57b3faf6fe5d6168bda0c36b0df1d05770f8e205e18332d0376ddb954d17aef2"},
+]
+geographiclib = [
+    {file = "geographiclib-1.50-py3-none-any.whl", hash = "sha256:51cfa698e7183792bce27d8fb63ac8e83689cd8170a730bf35e1a5c5bf8849b9"},
+    {file = "geographiclib-1.50.tar.gz", hash = "sha256:12bd46ee7ec25b291ea139b17aa991e7ef373e21abd053949b75c0e9ca55c632"},
+]
+geopy = [
+    {file = "geopy-2.1.0-py3-none-any.whl", hash = "sha256:4db8a2b79a2b3358a7d020ea195be639251a831a1b429c0d1b20c9f00c67c788"},
+    {file = "geopy-2.1.0.tar.gz", hash = "sha256:892b219413e7955587b029949af3a1949c6fbac9d5ad17b79d850718f6a9550f"},
 ]
 googlemaps = [
     {file = "googlemaps-4.4.2.tar.gz", hash = "sha256:8e13cbecc9b5b0462d53a78074c166753027be285db0c9fff70f5b40241ce500"},
