@@ -33,7 +33,6 @@ Backend (2)
 
 - [x] write a CLI that accepts a sample and returns a price estimate
 - [x] write flask api endpoint that accepts parameters in body and returns a price estimate
-- [ ] get eli5 endpoint working
 
 Frontend
 
@@ -43,16 +42,13 @@ Frontend
 - [x] implement flask-wtf (forms) prediction
 - [x] setup eli5 display
 - [x] write frontend unit tests
-- [ ] Style
-
-Pipeline
-
-- [ ] Add Support for categorical variable "Zipcode"
-  - [ ] Choose an encoding technique that doesn't introduce insane dimensionality
-  - [ ] Find a way to handle zipcodes not present in the training data
+- [x] add support for location as a model variable
+- [ ] Style app using bootstrap
+- [ ] Change explanation details
 
 Staging
 
+- [ ] Write mock API for GeoPy calls
 - [ ] Come up with a way to test the app on a copy of production data
 - [ ] Assess results and fix bugs
 - [ ] Setup a CircleCI pipeline
@@ -78,12 +74,6 @@ A/B Testing different algorithms
 Mean Encoding
 
 - [ ] Implement mean-target encoding with k-fold regularization for cat. variables
-
-Google Maps
-
-- [ ] Incorporate Google Maps Geocode data into the pipeline
-- [ ] Filter out listings outside of NYC
-- [ ] Handle zip codes that aren't in the training data
 
 Other
 
