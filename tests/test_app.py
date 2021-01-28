@@ -22,7 +22,7 @@ def form_data():
 
 
 def test_form_data_to_dataframe(form_data):
-    # check that test case has same # of fields as cached column order
+    # check that # columns of test case matches model requirement
     assert len(form_data.keys()) + 1 == len(app.column_order)
 
     dataframe = app.form_data_to_dataframe(form_data)
@@ -64,18 +64,20 @@ def cleaned_features(prediction):
     return app.clean_features(contributions, app.categorical_features)
 
 
-def test_order_features(prediction, cleaned_features):
+def test_order_features(prediction, cleaned_features, form_data):
     bias = prediction[1]
-    ordered_features = app.order_features(bias, cleaned_features)
+    ordered_features = app.order_features(
+        bias, cleaned_features, form_data["bedrooms"], form_data["bathrooms"]
+    )
     assert abs(
         sum([i[1] for i in ordered_features]) - bias - sum(cleaned_features.values())
         <= 0.01
     )
 
 
-def test_clean_and_style(prediction):
+def test_clean_and_style(prediction, form_data):
     bias, contributions = prediction[1], prediction[2]
-    assert (
-        str(type(app.clean_and_style(bias, contributions)))
-        == "<class 'markupsafe.Markup'>"
+    explanation = app.clean_and_style(
+        bias, contributions, form_data["bedrooms"], form_data["bathrooms"]
     )
+    assert str(type(explanation)) == "<class 'markupsafe.Markup'>"

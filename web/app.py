@@ -69,26 +69,30 @@ def clean_features(array, order) -> dict:
     return sums
 
 
-def order_features(bias, features) -> list:
+def order_features(bias, features, bedrooms, bathrooms) -> list:
     """Accepts a clean dictionary of features. Returns a UI-friendly array of
     tuples (ordered) explaining feature contributions."""
     ordered_features = []
     ordered_features.append(
-        ("base", bias + features["bedrooms"] + features["bathrooms"])
+        (
+            f"Avg. {bedrooms}br {bathrooms}ba in NYC",
+            bias + features["bedrooms"] + features["bathrooms"],
+        )
     )
     ordered_features.append(("location", features["latitude"] + features["longitude"]))
 
     for k, v in features.items():
         if k not in ["bedrooms", "bathrooms", "longitude", "latitude"]:
-            ordered_features.append((k, v))
+            if v != 0:
+                ordered_features.append((k, v))
     return ordered_features
 
 
-def clean_and_style(bias, contributions):
+def clean_and_style(bias, contributions, bedrooms, bathrooms):
     """This takes the results of a ti.predict() call and converts them into a
     user - friendly HTML table, showing the contribution of each feature"""
     cleaned_features = clean_features(contributions, column_order)
-    ordered_features = order_features(bias, cleaned_features)
+    ordered_features = order_features(bias, cleaned_features, bedrooms, bathrooms)
     contribution_tags = []
     for i in ordered_features:
         feature, contribution = i
@@ -111,7 +115,9 @@ def process_form(model, form_data):
     that prediction."""
     dataframe = form_data_to_dataframe(form_data)
     estimate, bias, contributions = predict_and_unpack(model, dataframe)
-    explanation = clean_and_style(bias, contributions)
+    explanation = clean_and_style(
+        bias, contributions, form_data["bedrooms"], form_data["bathrooms"]
+    )
     return round(estimate, 2), explanation
 
 
