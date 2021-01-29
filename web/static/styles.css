@@ -6,15 +6,5 @@ body {
     height: 100vh;
     margin:0px;
     padding:0px;
-    font-family: Helvetica;
-}
-
-.interface {
-    display: flex;
-    flex-direction:column;
-    width: 50vw;
-    height: 80vh;
-    border: 2px solid red;
-    justify-content: space-evenly;
-    align-items: center;
+    font-family: "Courier New";
 }
