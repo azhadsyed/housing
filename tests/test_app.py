@@ -66,9 +66,7 @@ def cleaned_features(prediction):
 
 def test_order_features(prediction, cleaned_features, form_data):
     bias = prediction[1]
-    ordered_features = app.order_features(
-        bias, cleaned_features, form_data["bedrooms"], form_data["bathrooms"]
-    )
+    ordered_features = app.order_features(bias, cleaned_features, form_data)
     assert abs(
         sum([i[1] for i in ordered_features]) - bias - sum(cleaned_features.values())
         <= 0.01
@@ -77,7 +75,5 @@ def test_order_features(prediction, cleaned_features, form_data):
 
 def test_clean_and_style(prediction, form_data):
     bias, contributions = prediction[1], prediction[2]
-    explanation = app.clean_and_style(
-        bias, contributions, form_data["bedrooms"], form_data["bathrooms"]
-    )
-    assert str(type(explanation)) == "<class 'markupsafe.Markup'>"
+    explanation = app.clean_and_style(bias, contributions, form_data)
+    assert type(explanation) == list

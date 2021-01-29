@@ -69,41 +69,77 @@ def clean_features(array, order) -> dict:
     return sums
 
 
-def order_features(bias, features, bedrooms, bathrooms) -> list:
+def display_pet_status(cats, dogs):
+    """Accepts two boolean values for whether cats and dogs are allowed, and
+    returns the relevant description of pet status as a string."""
+    if not cats and not dogs:
+        return "No Pets Allowed"
+    elif cats and not dogs:
+        return "Cats Allowed"
+    elif not cats and dogs:
+        return "Dogs Allowed"
+    else:
+        return "Pets Allowed"
+
+
+def order_features(bias, features, form_data) -> list:
     """Accepts a clean dictionary of features. Returns a UI-friendly array of
     tuples (ordered) explaining feature contributions."""
     ordered_features = []
+
+    # first establish a baseline depending on bedrooms/bathrooms
+    bedrooms, bathrooms = (form_data["bedrooms"], form_data["bathrooms"])
     ordered_features.append(
         (
             f"Avg. {bedrooms}br {bathrooms}ba in NYC",
             bias + features["bedrooms"] + features["bathrooms"],
         )
     )
-    ordered_features.append(("location", features["latitude"] + features["longitude"]))
 
-    for k, v in features.items():
-        if k not in ["bedrooms", "bathrooms", "longitude", "latitude"]:
-            if v != 0:
-                ordered_features.append((k, v))
+    # then factor in the location
+    ordered_features.append(("Location", features["latitude"] + features["longitude"]))
+
+    # then the pet status
+    cats, dogs = form_data["cats_ok"], form_data["dogs_ok"]
+    pet_status = display_pet_status(cats, dogs)
+    ordered_features.append((pet_status, features["cats_ok"] + features["dogs_ok"]))
+
+    # then the categorical variables
+    for i in [
+        ("Housing Type", "housing_type"),
+        ("Laundry", "laundry"),
+        ("Parking", "parking"),
+    ]:
+        cased_label, data_label = i
+        if features[data_label] != 0:
+            ordered_features.append(
+                (f"{cased_label}: {form_data[data_label]}", features[data_label])
+            )
+
+    # then the remaining booleans
+    for i in [
+        ("no_smoking", "Smoke-Free", "Smoke-Friendly"),
+        ("is_furnished", "Furnished", "Not Furnished"),
+        ("wheelchair_acccess", "Wheelchair-Friendly", "No Wheelchair Access"),
+        ("ev_charging", "Electronic Vehicle Charging", "No Electric Vehicle Charging"),
+    ]:
+        data_label, truthy, falsy = i
+        if features[data_label] != 0:
+            if form_data[data_label]:
+                ui_label = truthy
+            else:
+                ui_label = falsy
+        ordered_features.append((ui_label, features[data_label]))
+
     return ordered_features
 
 
-def clean_and_style(bias, contributions, bedrooms, bathrooms):
+def clean_and_style(bias, contributions, form_data):
     """This takes the results of a ti.predict() call and converts them into a
     user - friendly HTML table, showing the contribution of each feature"""
     cleaned_features = clean_features(contributions, column_order)
-    ordered_features = order_features(bias, cleaned_features, bedrooms, bathrooms)
-    contribution_tags = []
-    for i in ordered_features:
-        feature, contribution = i
-        contribution_tags.append(
-            "<tr><td>"
-            + feature
-            + "</td><td>"
-            + str(round(contribution, 2))
-            + "</td></tr>"
-        )
-    return Markup("<table>" + "".join(contribution_tags) + "</table>")
+    ordered_features = order_features(bias, cleaned_features, form_data)
+    return ordered_features
 
 
 def process_form(model, form_data):
@@ -115,9 +151,7 @@ def process_form(model, form_data):
     that prediction."""
     dataframe = form_data_to_dataframe(form_data)
     estimate, bias, contributions = predict_and_unpack(model, dataframe)
-    explanation = clean_and_style(
-        bias, contributions, form_data["bedrooms"], form_data["bathrooms"]
-    )
+    explanation = clean_and_style(bias, contributions, form_data)
     return round(estimate, 2), explanation
 
 

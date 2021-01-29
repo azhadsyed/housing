@@ -4,27 +4,58 @@
 {% block content %}
 
 Thinking about signing a lease in NYC? Enter the details below to find out how much the apartment is worth!
-<form method="POST" action="/">
-    {{ form.csrf_token }}
-    {{ render_field(form.address) }}
-    {{ render_field(form.bedrooms) }}
-    {{ render_field(form.bathrooms) }}
-    {{ render_field(form.housing_type) }}
-    {{ render_field(form.laundry) }}
-    {{ render_field(form.parking) }}
-    {{ render_field(form.is_furnished) }}
-    {{ render_field(form.no_smoking) }}
-    {{ render_field(form.wheelchair_acccess) }}
-    {{ render_field(form.ev_charging) }}
-    {{ render_field(form.cats_ok) }}
-    {{ render_field(form.dogs_ok) }}
-    {{ form.submit }}
-</form>
+<br><br>
+<div style="display:flex;flex-direction:row;">
+    <form method="POST" action="/">
+        {{ render_field(form.address) }}
+        {{ render_field(form.bedrooms) }}
+        {{ render_field(form.bathrooms) }}
+        {{ render_field(form.housing_type) }}
+        {{ render_field(form.laundry) }}
+        {{ render_field(form.parking) }}
+        <br>
+        {{ render_field(form.cats_ok) }}
+        {{ render_field(form.dogs_ok) }}
+        <br>
+        {{ render_field(form.is_furnished) }}
+        {{ render_field(form.no_smoking) }}
+        {{ render_field(form.wheelchair_acccess) }}
+        {{ render_field(form.ev_charging) }}
+        <br>
+        <div style="display:flex;justify-content: center;align-items:center;">{{ form.submit }}</div>
+    </form>
+    <div>
+        {% if estimate %}
 
-{% if estimate %}
-The fair listing price of this apartment is ${{ estimate }}.
+        <table style="width:400px">
+            <colgroup>
+                <col span="1" style="width: 80%" />
+                <col span="1" style="width: 20%" />
+            </colgroup>
+            <tr>
+                <td><b>Your Estimate</b></td>
+            </tr>
+            {% for i in explanation %}
+            <tr>
+                <td>{{ i[0] }}</td>
+                <td align="right">
+                    {% if "Avg" in i[0]%}
+                    {{ "$%.2f"|format(i[1]) }}
+                    {% else %}
+                    {{ "$%+.2f"|format(i[1]) }}
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td style="border-top:2px solid black"><b>Total</b></td>
+                <td style="border-top:2px solid black" align="right"><b>{{ "$%.2f"|format(estimate) }}</b></td>
+            </tr>
 
-{{ explanation }}
+        </table>
 
-{% endif %}
+        {% endif %}
+    </div>
+</div>
+
 {% endblock %}
