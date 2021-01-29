@@ -43,7 +43,7 @@ Frontend
 - [x] setup eli5 display
 - [x] write frontend unit tests
 - [x] add support for location as a model variable
-- [ ] Style app using bootstrap
+- [x] Style app (basics)
 - [ ] Change explanation details
 
 Staging
@@ -62,6 +62,16 @@ Deployment
 Implementation Fixes
 
 - [ ] Refactor using App Factory and some functional tests
+
+Data Quality
+
+- [ ] Setup bad-data filters
+- [ ] Automate once-weekly checks to remove flagged/removed/expired listings
+
+Frontend Updates
+
+- [ ] add hover tips explaining what each variable means (see design of [SmartAsset Calculator](https://smartasset.com/taxes/income-taxes))
+- [ ] Article: Interesting Things I learned about rent in NYC
 
 A/B Testing different algorithms
 
