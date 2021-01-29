@@ -3,19 +3,15 @@
     {% if field.type == "BooleanField" %}
     {{ field }}{{ field.label }}
     {% else %}
-
     {{ field.label }}
     <br>
     {{ field(**kwargs)|safe }}
     {% endif %}
-
     {% if field.errors %}
-
     {% for error in field.errors %}
     <br>
     <div style="font-size: 75%; color:red">{{ error }}</div>
     {% endfor %}
-
     {% endif %}
 </div>
 {% endmacro %}

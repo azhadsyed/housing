@@ -7,16 +7,16 @@ from web import app
 def form_data():
     return {
         "address": "397 Bridge St., Brooklyn NY",
-        "cats_ok": True,
+        "cats_ok": False,
         "dogs_ok": False,
         "housing_type": "apartment",
         "laundry": "laundry in bldg",
-        "bedrooms": 3,
+        "bedrooms": 2,
         "bathrooms": 1,
-        "parking": "street parking",
+        "parking": "attached garage",
         "no_smoking": False,
-        "is_furnished": False,
-        "wheelchair_acccess": True,
+        "is_furnished": True,
+        "wheelchair_acccess": False,
         "ev_charging": False,
     }
 

@@ -130,6 +130,7 @@ def order_features(bias, features, form_data) -> list:
             else:
                 ui_label = falsy
         ordered_features.append((ui_label, features[data_label]))
+        breakpoint()
 
     return ordered_features
 
@@ -161,7 +162,8 @@ def home():
     estimate, explanation = None, None
     if request.method == "POST" and form.validate():
         estimate, explanation = process_form(
-            model, form.data  # pylint: disable=no-member
+            model,
+            form.data,  # pylint: disable=no-member
         )
     return render_template(
         "form.html",

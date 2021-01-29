@@ -2,15 +2,7 @@
 
 Codebase for my NYC rent estimator app. Accepts an apartment's location, size, and amenities as inputs; outputs a listing price estimate and an ELI5 explanation of how that listing price is calculated.
 
-Built in Python using Flask/Jinja, Pandas, Pymongo and Scikit-learn, and other community packages.
-
-## FAQ
-
-**Is this the same as Rentestimator.com?** Sort of.
-
-1. Rentestimator.com isn't free after the first 5 searches.
-2. Rentestimator.com doesn't factor in laundry, parking, and pet-status, and hasn't scaled to other features recently
-3. Rentestimator.com uses a k-nearest-neighbors approach, I use a decision-tree approach which is more robust to outliers, allows for learning to transfer between different areas of NYC where eligible, and is robust to interaction effects (for example, in certain areas of NYC are in-unit washers/dryers given more of a premium than in other areas?)
+Built in Python using Flask/Jinja, Pandas, Pymongo, Scikit-learn, and other community packages.
 
 ## TODO
 
@@ -44,7 +36,13 @@ Frontend
 - [x] write frontend unit tests
 - [x] add support for location as a model variable
 - [x] Style app (basics)
-- [ ] Change explanation details
+- [x] Change explanation details
+
+Quick Fixes (from pair session w/Annie)
+
+- [x] estimate button
+- [x] "Your Estimate" Font size
+- [o] input fonts (not super relevant)
 
 Staging
 
@@ -63,6 +61,14 @@ Implementation Fixes
 
 - [ ] Refactor using App Factory and some functional tests
 
+A/B Testing different algorithms
+
+- [ ] Refactor, and write tests for, the ML pipeline
+- [ ] Linear Regression, KNN, Decision Tree, Random Forest, GBR, XGBoost, Catboost
+- [ ] Geospatial Regression Algorithms
+- [ ] Build a shootout results view that goes into the math/statistics
+- [ ] Incorporate the winner
+
 Data Quality
 
 - [ ] Setup bad-data filters
@@ -72,14 +78,6 @@ Frontend Updates
 
 - [ ] add hover tips explaining what each variable means (see design of [SmartAsset Calculator](https://smartasset.com/taxes/income-taxes))
 - [ ] Article: Interesting Things I learned about rent in NYC
-
-A/B Testing different algorithms
-
-- [ ] Refactor, and write tests for, the ML pipeline
-- [ ] Linear Regression, KNN, Decision Tree, Random Forest, GBR, XGBoost, Catboost
-- [ ] Geospatial Regression Algorithms
-- [ ] Build a shootout results view that goes into the math/statistic
-- [ ] Incorporate the winner
 
 Mean Encoding
 

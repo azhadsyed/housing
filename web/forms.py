@@ -17,9 +17,21 @@ housing_type_choices = options["housing type"]
 
 
 class EstimateForm(Form):
-    address = StringField("Street Address", [InputRequired()], render_kw={"size": 30})
-    bedrooms = IntegerField("No. Bedrooms", [InputRequired()], render_kw={"size": 5})
-    bathrooms = DecimalField("No. Bathrooms", [InputRequired()], render_kw={"size": 5})
+    address = StringField(
+        "Street Address",
+        [InputRequired()],
+        render_kw={"size": 30, "font-family": "Courier"},
+    )
+    bedrooms = IntegerField(
+        "No. Bedrooms",
+        [InputRequired()],
+        render_kw={"size": 5, "font-family": "Courier"},
+    )
+    bathrooms = DecimalField(
+        "No. Bathrooms",
+        [InputRequired()],
+        render_kw={"size": 5, "font-family": "Courier"},
+    )
     housing_type = SelectField("Housing Type", choices=housing_type_choices)
     laundry = SelectField("Laundry", choices=laundry_choices)
     parking = SelectField("Parking", choices=parking_choices)
@@ -29,4 +41,9 @@ class EstimateForm(Form):
     ev_charging = BooleanField("Electric Vehicle Charging")
     cats_ok = BooleanField("Cats Allowed")
     dogs_ok = BooleanField("Dogs Allowed")
-    submit = SubmitField("Estimate")
+    submit = SubmitField(
+        "Estimate",
+        render_kw={
+            "style": "font-size:120%;background-color:black;border:none;color:white;font-family:Courier;border-radius:4px"
+        },
+    )
