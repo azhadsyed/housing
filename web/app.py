@@ -1,46 +1,44 @@
-# warm for the winter - Middle School, Aso
-
 import json
 import pickle
 from functools import lru_cache as cache
 
 import pandas as pd
 from flask import Flask, Markup, render_template, request
-from geopy.geocoders import Nominatim
-from joblib import load
 from treeinterpreter import treeinterpreter as ti
 import shap
+from geopy.geocoders import Nominatim
+import joblib
 
-from .config import options
+
 from .forms import EstimateForm
-
-# from here until first function definition, this could all live in some sort of config?
-
-model_columns = options["column order"]
-categorical_features = options["categorical features"]
+from .config import options
 
 app = Flask(__name__)
 app.config.from_pyfile("config.py")
 
-model = load("data/model.joblib")
-feature_names = model.steps[0][1].get_feature_names()
-explainer = shap.TreeExplainer(model.steps[1][1])
 
-nominatim = Nominatim(user_agent="nyc_rent_estimator")
-all_hands_on_deck = pickle.load(open("data/geopy_mock_response.pkl", "rb"))
+app.model_columns = options["column order"]
+app.categorical_features = options["categorical features"]
 
-ti_enabled = False
+app.model = joblib.load("data/model.joblib")
+app.feature_names = app.model.steps[0][1].get_feature_names()
+app.explainer = shap.TreeExplainer(app.model.steps[1][1])
+
+app.nominatim = Nominatim(user_agent="nyc_rent_estimator")
+app.all_hands_on_deck = pickle.load(open("data/geopy_mock_response.pkl", "rb"))
+
+app.ti_enabled = False
 
 
 @cache(maxsize=200)
 def geocode_address(address):
     """Accepts an address string, returns a tuple of latitude and longitude"""
     try:
-        response = nominatim.geocode(address)
+        response = app.nominatim.geocode(address)
         print("API UP")
         return response
     except:
-        return all_hands_on_deck
+        return app.all_hands_on_deck
 
 
 def form_data_to_dataframe(form_data):
@@ -53,7 +51,7 @@ def form_data_to_dataframe(form_data):
     form_data["longitude"] = location.longitude
     dict_for_pandas = {k: [v] for k, v in form_data.items()}
     dataframe = pd.DataFrame.from_dict(dict_for_pandas)
-    return dataframe[model_columns]
+    return dataframe[app.model_columns]
 
 
 def predict_and_unpack(model, dataframe) -> (float, float, list):
@@ -62,20 +60,22 @@ def predict_and_unpack(model, dataframe) -> (float, float, list):
     dimensional array of feature names and floating precision contributions."""
     if len(dataframe) != 1:
         raise ValueError("dataframe cannot have more than one row.")
-    if ti_enabled:
+    if app.ti_enabled:
         estimate, bias, contributions = ti.predict(
             model.steps[-1][1], model.steps[0][1].transform(dataframe)
         )
         estimate = estimate[0, 0]
         bias, contributions = bias[0], contributions[0]
         contributions = list(
-            filter(lambda x: x[1] != 0, zip(feature_names, contributions))
+            filter(lambda x: x[1] != 0, zip(app.feature_names, contributions))
         )
     else:
         estimate = model.predict(dataframe)[0]
-        contributions = explainer.shap_values(model.steps[0][1].transform(dataframe))[0]
-        bias = explainer.expected_value[0]
-        contributions = list(zip(feature_names, contributions))
+        contributions = app.explainer.shap_values(
+            model.steps[0][1].transform(dataframe)
+        )[0]
+        bias = app.explainer.expected_value[0]
+        contributions = list(zip(app.feature_names, contributions))
     return estimate, bias, contributions
 
 
@@ -163,7 +163,7 @@ def order_features(bias, features, form_data) -> list:
 def clean_and_style(bias, contributions, form_data):
     """This takes the results of a ti.predict() call and converts them into a
     user - friendly HTML table, showing the contribution of each feature"""
-    cleaned_features = clean_features(contributions, model_columns)
+    cleaned_features = clean_features(contributions, app.model_columns)
     ordered_features = order_features(bias, cleaned_features, form_data)
     return ordered_features
 
@@ -191,7 +191,7 @@ def home():
     estimate, explanation = None, None
     if request.method == "POST" and form.validate():
         estimate, explanation = process_form(
-            model,
+            app.model,
             form.data,  # pylint: disable=no-member
         )
     return render_template(
