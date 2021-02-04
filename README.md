@@ -35,31 +35,40 @@ Frontend
 - [x] setup eli5 display
 - [x] write frontend unit tests
 - [x] add support for location as a model variable
-- [x] Style app (basics)
+- [x] Style app (basic)
 - [x] Change explanation details
 
 Quick Fixes (from pair session w/Annie)
 
 - [x] estimate button
 - [x] "Your Estimate" Font size
-- [o] input fonts (not super relevant)
+- [ ] Add some kind of "Calculating..." progress animation
 
 Staging
 
-- [ ] Write mock API for GeoPy calls
-- [ ] Come up with a way to test the app on a copy of production data
-- [ ] Assess results and fix bugs
-- [ ] Setup a CircleCI pipeline
+- [x] Write mock API for GeoPy calls
+- [x] Come up with a way to test the app on a copy of production data (read only)
+- [x] Assess results and fix bugs
+- [x] Cache API calls (flask-caching)
+- [x] Implement SHAP and see how it looks (not really more interpretable, but faster)
+- [ ] Setup a CircleCI pipeline and maybe 1 functional test
 
 Deployment
 
 - [ ] setup cron job to update CSV and model daily
-- [ ] Containerize the application
+- [ ] Containerize the application (?)
 - [ ] Deploy using DigitalOcean
 
-Implementation Fixes
+Post-Launch Fixes
 
+- [ ] write performance profiling utility to isolate timesink in ML steps
 - [ ] Refactor using App Factory and some functional tests
+- [ ] change "input area" fonts to Courier (not super important)
+
+Data Quality
+
+- [ ] Setup bad-data filters
+- [ ] Automate once-weekly checks to remove flagged/removed/expired listings
 
 A/B Testing different algorithms
 
@@ -68,11 +77,6 @@ A/B Testing different algorithms
 - [ ] Geospatial Regression Algorithms
 - [ ] Build a shootout results view that goes into the math/statistics
 - [ ] Incorporate the winner
-
-Data Quality
-
-- [ ] Setup bad-data filters
-- [ ] Automate once-weekly checks to remove flagged/removed/expired listings
 
 Frontend Updates
 
