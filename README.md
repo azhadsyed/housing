@@ -4,7 +4,7 @@ Codebase for my NYC rent estimator app. Accepts an apartment's location, size, a
 
 Built in Python using Flask/Jinja, Pandas, Pymongo, Scikit-learn, and other community packages.
 
-## TODO
+## Roadmap
 
 Database Deployment (6)
 
@@ -42,7 +42,6 @@ Quick Fixes (from pair session w/Annie)
 
 - [x] estimate button
 - [x] "Your Estimate" Font size
-- [ ] Add some kind of "Calculating..." progress animation
 
 Staging
 
@@ -51,18 +50,16 @@ Staging
 - [x] Assess results and fix bugs
 - [x] Cache API calls (flask-caching)
 - [x] Implement SHAP and see how it looks (not really more interpretable, but faster)
-- [ ] Setup a CircleCI pipeline and maybe 1 functional test
+- [x] Write a test that asserts that the page loads, and doesn't break when you estimate on a test case
 
-Deployment
+CI/CD
 
 - [ ] setup cron job to update CSV and model daily
-- [ ] Containerize the application (?)
-- [ ] Deploy using DigitalOcean
+- [ ] Setup a CircleCI pipeline
+- [ ] Deploy using DigitalOcean and Docker
 
 Post-Launch Fixes
 
-- [ ] write performance profiling utility to isolate timesink in ML steps
-- [ ] Refactor using App Factory and some functional tests
 - [ ] change "input area" fonts to Courier (not super important)
 
 Data Quality
@@ -72,8 +69,10 @@ Data Quality
 
 A/B Testing different algorithms
 
+- [ ] Implement mean-target encoding with k-fold regularization for cat. variables
 - [ ] Refactor, and write tests for, the ML pipeline
-- [ ] Linear Regression, KNN, Decision Tree, Random Forest, GBR, XGBoost, Catboost
+- [x] Linear Regression, KNN, Decision Tree, Random Forest
+- [ ] GBR, XGBoost, Catboost
 - [ ] Geospatial Regression Algorithms
 - [ ] Build a shootout results view that goes into the math/statistics
 - [ ] Incorporate the winner
@@ -82,12 +81,5 @@ Frontend Updates
 
 - [ ] add hover tips explaining what each variable means (see design of [SmartAsset Calculator](https://smartasset.com/taxes/income-taxes))
 - [ ] Article: Interesting Things I learned about rent in NYC
-
-Mean Encoding
-
-- [ ] Implement mean-target encoding with k-fold regularization for cat. variables
-
-Other
-
 - [ ] Visualize median price by zipcode in NYC
 - [ ] How different is a zipcode from the average of all the other touching zipcodes?
