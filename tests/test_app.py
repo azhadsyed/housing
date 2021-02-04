@@ -1,6 +1,10 @@
-from functools import reduce
+import pickle
+
 import pytest
 from web import app
+from unittest.mock import patch
+
+geopy_mock_response = pickle.load(open("data/geopy_mock_response.pkl", "rb"))
 
 
 @pytest.fixture
@@ -21,18 +25,23 @@ def form_data():
     }
 
 
-def test_form_data_to_dataframe(form_data):
-    # check that # columns of test case matches model requirement
-    assert len(form_data.keys()) + 1 == len(app.column_order)
+@patch("web.app.geocode_address", return_value=geopy_mock_response)
+def test_form_data_to_dataframe(mock, form_data):
+    # check that test case's # columns matches model requirement
+    assert len(form_data.keys()) + 1 == len(app.model_columns)
 
     dataframe = app.form_data_to_dataframe(form_data)
     assert str(type(dataframe)) == "<class 'pandas.core.frame.DataFrame'>"
     assert "latitude" in dataframe.columns and "longitude" in dataframe.columns
+    mock.assert_called_once()
 
 
 @pytest.fixture
-def dataframe(form_data):
-    return app.form_data_to_dataframe(form_data)
+@patch("web.app.geocode_address", return_value=geopy_mock_response)
+def dataframe(mock, form_data):
+    dataframe = app.form_data_to_dataframe(form_data)
+    mock.assert_called_once()
+    return dataframe
 
 
 def test_predict_and_unpack(dataframe):
@@ -40,10 +49,7 @@ def test_predict_and_unpack(dataframe):
     assert str(type(estimate)) == "<class 'numpy.float64'>"
     assert str(type(bias)) == "<class 'numpy.float64'>"
     assert type(contributions) == list
-    try:
-        assert estimate - bias + sum([i[1] for i in contributions]) <= 0.01
-    except AssertionError:
-        print(estimate - bias + sum([i[1] for i in contributions]))
+    assert abs(estimate - bias - sum([i[1] for i in contributions])) <= 0.01
 
 
 @pytest.fixture
