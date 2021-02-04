@@ -25,20 +25,29 @@ Thinking about signing a lease in NYC? Enter the details below to find out how m
         <div style="display:flex;justify-content: center;align-items:center;">{{ form.submit }}</div>
     </form>
     {% if estimate %}
-    <div>
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center">
+        <div style="font-size:120%"><b>The market listing price for this apartment is
+                {{ "$%.2f"|format(estimate) }}/month.</b>
+        </div>
+        <br>
+        <div style="width:400px;font-size:80%">This is the rent you should expect a landlord to list this apartment for.
+            You can negotiate for a lower rent, but you probably shouldn't end up paying any more than this amount for
+            this apartment.
+        </div>
+        <br>
         <table style="width:400px">
             <colgroup>
                 <col span="1" style="width: 80%" />
                 <col span="1" style="width: 20%" />
             </colgroup>
             <tr style="font-size:120%">
-                <td><b>Your Estimate</b></td>
+                <td><b>Explanation</b></td>
             </tr>
             {% for i in explanation %}
             <tr>
                 <td>{{ i[0] }}</td>
                 <td align="right">
-                    {% if "Avg" in i[0]%}
+                    {% if "Base" in i[0]%}
                     {{ "$%.2f"|format(i[1]) }}
                     {% else %}
                     {{ "$%+.2f"|format(i[1]) }}
