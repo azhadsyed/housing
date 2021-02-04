@@ -29,7 +29,7 @@ np.set_printoptions(threshold=np.inf)
 pd.set_option("display.max_columns", None)
 
 # 0. Read the data
-data = pd.read_csv("data.csv")
+data = pd.read_csv("data/data.csv")
 
 # ["housing_type", "laundry", "parking"]
 categorical_features = data.dtypes[data.dtypes == "object"].index.values

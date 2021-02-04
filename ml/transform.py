@@ -22,9 +22,11 @@ from pymongo import MongoClient
 import pandas as pd, numpy as np
 import re, json
 
+# Step 0: the Mongo Connection string should have a default, but be CLI-driven
+from config import connection_string
 
 # Step 1: Connect to the database (Mongo)
-client = MongoClient()
+client = MongoClient(connection_string)
 db = client["housing"]
 collection = db["listings"]
 listings = list(collection.find())
@@ -66,6 +68,7 @@ dataframe = dataframe[(in_name == False) & (in_body == False)]  # this could be 
 
 # 4b. cleaning Price, bedrooms and bathrooms
 dataframe["price"] = dataframe["price"].apply(lambda x: float(re.sub(r"[,$]+", "", x)))
+dataframe = dataframe[dataframe.price.between(10, 10000)]
 
 keywords = ["shared", "split"]
 dataframe.loc[dataframe.bathrooms.apply(lambda x: x in keywords), "bathrooms"] = 0.5
@@ -151,8 +154,8 @@ impute_rooms("bedrooms", bedroom_expression)
 impute_rooms("bathrooms", bathroom_expression)
 
 # unpack lat and long
-dataframe["latitude"] = dataframe["geotag"].apply(lambda x: x[0])
-dataframe["longitude"] = dataframe["geotag"].apply(lambda x: x[1])
+dataframe["latitude"] = dataframe["geotag"].apply(lambda x: x[0] if x else None)
+dataframe["longitude"] = dataframe["geotag"].apply(lambda x: x[1] if x else None)
 
 # Step 5: drop extra columns (that were needed for cleaning, not for training)
 extra = ["name", "body", "geotag"]
@@ -161,7 +164,7 @@ dataframe.dropna(inplace=True)
 dataframe.drop(extra, axis=1, inplace=True)
 
 # Step 6: transform the training fields into a csv file
-dataframe.to_csv("data.csv", index=False)  # this filepath needs to be config
+dataframe.to_csv("data/data.csv", index=False)  # this filepath needs to be config
 
 # Step 7: cache the options from categorical variables to options.json, as well
 # as the column order excluding ID and price
@@ -176,5 +179,5 @@ options = {
     "column order": column_order,
     "categorical features": categorical_features,
 }
-with open("options.json", "w") as f:
+with open("data/options.json", "w") as f:
     json.dump(options, f)
