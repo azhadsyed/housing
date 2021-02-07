@@ -1,33 +1,7 @@
-import json
-import pickle
 from functools import lru_cache as cache
-
+from app import app
 import pandas as pd
-from flask import Flask, Markup, render_template, request
 from treeinterpreter import treeinterpreter as ti
-import shap
-from geopy.geocoders import Nominatim
-import joblib
-
-
-from .forms import EstimateForm
-from .config import options
-
-app = Flask(__name__)
-app.config.from_pyfile("config.py")
-
-
-app.model_columns = options["column order"]
-app.categorical_features = options["categorical features"]
-
-app.model = joblib.load("data/model.joblib")
-app.feature_names = app.model.steps[0][1].get_feature_names()
-app.explainer = shap.TreeExplainer(app.model.steps[1][1])
-
-app.nominatim = Nominatim(user_agent="nyc_rent_estimator")
-app.all_hands_on_deck = pickle.load(open("data/geopy_mock_response.pkl", "rb"))
-
-app.ti_enabled = False
 
 
 @cache(maxsize=200)
@@ -38,6 +12,7 @@ def geocode_address(address):
         print("API UP")
         return response
     except:
+        print("API DOWN")
         return app.all_hands_on_deck
 
 
@@ -175,32 +150,11 @@ def process_form(model, form_data):
     Returns a tuple of a) the model's prediction for that apartment's price, and
     b) an HTML table summarizing the treeinterpreter feature contributions for
     that prediction."""
-    print("step 1 - ingest form data")
+    # print("step 1 - ingest form data")
     dataframe = form_data_to_dataframe(form_data)
-    print("step 2 - ML")
+    # print("step 2 - ML")
     estimate, bias, contributions = predict_and_unpack(model, dataframe)
-    print("step 3 - Clean and style")
+    # print("step 3 - Clean and style")
     explanation = clean_and_style(bias, contributions, form_data)
-    print("step 4 - Ready to go")
+    # print("step 4 - Ready to go")
     return round(estimate, 2), explanation
-
-
-@app.route("/", methods=["GET", "POST"])
-def home():
-    form = EstimateForm(request.form)
-    estimate, explanation = None, None
-    if request.method == "POST" and form.validate():
-        estimate, explanation = process_form(
-            app.model,
-            form.data,  # pylint: disable=no-member
-        )
-    return render_template(
-        "form.html",
-        form=form,
-        estimate=estimate,
-        explanation=explanation,
-    )
-
-
-if __name__ == "__main__":
-    app.run(PORT=5000)
