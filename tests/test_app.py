@@ -85,17 +85,6 @@ def test_clean_and_style(prediction, form_data):
     assert type(explanation) == list
 
 
-"""
-GIVEN an instance of the app
-WHEN you get request "/"
-THEN response.data contains: "Thinking about signing a lease in NYC?"
-
-GIVEN an instance of the app
-WHEN you POST request "/"
-THEN response.data contains: "The market listing price for this apartment is"
-"""
-
-
 @pytest.fixture
 def testing_client():
     with app.app.test_client() as testing_client:
@@ -103,7 +92,13 @@ def testing_client():
             yield testing_client
 
 
+@patch("web.app.geocode_address", return_value=geopy_mock_response)
 def test_home_get(testing_client):
+    """
+    GIVEN an instance of the app
+    WHEN you get request '/'
+    THEN response.data contains: 'Thinking about signing a lease in NYC?'
+    """
     response = testing_client.get("/")
     assert response.status_code == 200
     assert b"Thinking about signing a lease in NYC?" in response.data
@@ -111,6 +106,11 @@ def test_home_get(testing_client):
 
 @patch("web.app.geocode_address", return_value=geopy_mock_response)
 def test_home_post(mock, testing_client, form_data):
+    """
+    GIVEN an instance of the app
+    WHEN you POST request '/'
+    THEN response.data contains: 'The market listing price for this apartment is'
+    """
     response = testing_client.post("/", data=form_data)
     assert response.status_code == 200
     assert b"The market listing price for this apartment is" in response.data
