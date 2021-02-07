@@ -164,7 +164,7 @@ dataframe.dropna(inplace=True)
 dataframe.drop(extra, axis=1, inplace=True)
 
 # Step 6: transform the training fields into a csv file
-dataframe.to_csv("data/data.csv", index=False)  # this filepath needs to be config
+dataframe.to_csv(open("data/data.csv", "w"), index=False)
 
 # Step 7: cache the options from categorical variables to options.json, as well
 # as the column order excluding ID and price

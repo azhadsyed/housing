@@ -58,4 +58,4 @@ error = abs(predictions - y_test)
 print(error.describe())
 
 # 4. Cache the model for downstream use
-dump(model, "data/model.joblib")
+dump(model, open("data/model.joblib", "wb"))
