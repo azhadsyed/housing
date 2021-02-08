@@ -1,3 +1,4 @@
+import json
 from wtforms import (
     BooleanField,
     Form,
@@ -9,7 +10,8 @@ from wtforms import (
 )
 from wtforms.validators import InputRequired, ValidationError
 
-from .config import options
+with open("data/options.json", "r") as f:
+    options = json.load(f)
 
 laundry_choices = options["laundry"]
 parking_choices = options["parking"]
