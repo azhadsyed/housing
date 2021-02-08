@@ -50,7 +50,9 @@ def predict_and_unpack(model, dataframe) -> (float, float, list):
             model.steps[0][1].transform(dataframe)
         )[0]
         bias = app.explainer.expected_value[0]
-        contributions = list(zip(app.feature_names, contributions))
+        contributions = list(
+            filter(lambda x: x[1] != 0, zip(app.feature_names, contributions))
+        )
     return estimate, bias, contributions
 
 

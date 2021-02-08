@@ -23,3 +23,5 @@ app.nominatim = Nominatim(user_agent="nyc_rent_estimator")
 app.all_hands_on_deck = pickle.load(open("data/geopy_mock_response.pkl", "rb"))
 
 app.ti_enabled = False
+
+from app import views
