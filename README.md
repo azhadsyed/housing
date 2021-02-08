@@ -74,11 +74,11 @@ Staging
 Docker
 
 - [x] structure and run the flask app as a package
-- [ ] Add configuration files to the production environment (app and ml)
+- [x] Add configuration files to the production environment (app and ml)
 - [x] Generate first-use data dependencies (run transform and train)
 - [ ] Write a Dockerfile
 - [ ] Write a startup script
-- [ ] Debug, debug, debug
+- [ ] See if it works, debug if not
 - [ ] setup the cron scripts (transform and train) and one-off test them (try logging?)
 
 CircleCI
