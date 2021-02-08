@@ -1,8 +1,27 @@
 # NYC Rent Estimator App
 
-Codebase for my NYC rent estimator app. Accepts an apartment's location, size, and amenities as inputs; outputs a listing price estimate and an ELI5 explanation of how that listing price is calculated.
+Codebase for my NYC rent estimator app. Accepts an apartment's location, size, and amenities as inputs; outputs an estimated listing price and a SHAP-driven explanation of how that listing price is calculated.
 
 Built in Python using Flask/Jinja, Pandas, Pymongo, Scikit-learn, and other community packages.
+
+Deployed using CircleCI and Docker.
+
+## CI/CD Brainstorming
+
+What does this build need? Think infrastructure as code
+
+1. tests need to pass
+   - On merge
+   - On build/deploy
+2. Python dependencies
+   - on deploy, make sure they're all there
+3. Data Dependencies: data.csv, model.joblib, options.json
+   - They get updated daily using python scripts
+   - The app cannot run without them
+4. Connection to the MongoDB server
+5. The MongoDB itself
+   - Decoupled from the docker container, accessed using a connection_string
+   - It gets updated daily using a python script
 
 ## Roadmap
 
@@ -52,11 +71,19 @@ Staging
 - [x] Implement SHAP and see how it looks (not really more interpretable, but faster)
 - [x] Write a test that asserts that the page loads, and doesn't break when you estimate on a test case
 
-CI/CD
+Docker
 
-- [ ] setup cron job to update CSV and model daily
-- [ ] Setup a CircleCI pipeline
-- [ ] Deploy using DigitalOcean and Docker
+- [x] structure and run the flask app as a package
+- [ ] Add configuration files to the production environment (app and ml)
+- [x] Generate first-use data dependencies (run transform and train)
+- [ ] Write a Dockerfile
+- [ ] Write a startup script
+- [ ] Debug, debug, debug
+- [ ] setup the cron scripts (transform and train) and one-off test them (try logging?)
+
+CircleCI
+
+- [ ] Write a CircleCI Pipeline that satisfies build/testing criteria
 
 Post-Launch Fixes
 
@@ -66,6 +93,14 @@ Data Quality
 
 - [ ] Setup bad-data filters
 - [ ] Automate once-weekly checks to remove flagged/removed/expired listings
+
+Data Exploration
+
+- [ ] Shap interaction reporting
+- [ ] Building NYC Variable maps
+- [ ] Article: Interesting Things I learned about rent in NYC
+- [ ] Visualize median price by zipcode in NYC
+- [ ] How different is a zipcode from the average of all the other touching zipcodes?
 
 A/B Testing different algorithms
 
@@ -80,6 +115,3 @@ A/B Testing different algorithms
 Frontend Updates
 
 - [ ] add hover tips explaining what each variable means (see design of [SmartAsset Calculator](https://smartasset.com/taxes/income-taxes))
-- [ ] Article: Interesting Things I learned about rent in NYC
-- [ ] Visualize median price by zipcode in NYC
-- [ ] How different is a zipcode from the average of all the other touching zipcodes?
