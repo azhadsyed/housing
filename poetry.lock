@@ -197,17 +197,6 @@ requests = ["urllib3 (>=1.24.2)", "requests (>=2.16.2)"]
 timezone = ["pytz"]
 
 [[package]]
-name = "googlemaps"
-version = "4.4.2"
-description = "Python client library for Google Maps Platform"
-category = "main"
-optional = false
-python-versions = ">=3.5"
-
-[package.dependencies]
-requests = ">=2.20.0,<3.0"
-
-[[package]]
 name = "idna"
 version = "2.10"
 description = "Internationalized Domain Names in Applications (IDNA)"
@@ -862,7 +851,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "d423b0165b278a0a1883afc03ef48deca783d46d9099173620d9b4d3f549f715"
+content-hash = "9b35935cd3b59cf18d0919e94b08e21154dbc82392f27d772f6f92c8ffee2f4f"
 
 [metadata.files]
 appdirs = [
@@ -931,9 +920,6 @@ geographiclib = [
 geopy = [
     {file = "geopy-2.1.0-py3-none-any.whl", hash = "sha256:4db8a2b79a2b3358a7d020ea195be639251a831a1b429c0d1b20c9f00c67c788"},
     {file = "geopy-2.1.0.tar.gz", hash = "sha256:892b219413e7955587b029949af3a1949c6fbac9d5ad17b79d850718f6a9550f"},
-]
-googlemaps = [
-    {file = "googlemaps-4.4.2.tar.gz", hash = "sha256:8e13cbecc9b5b0462d53a78074c166753027be285db0c9fff70f5b40241ce500"},
 ]
 idna = [
     {file = "idna-2.10-py2.py3-none-any.whl", hash = "sha256:b97d804b1e9b523befed77c48dacec60e6dcb0b5391d57af6a65a312a90648c0"},
