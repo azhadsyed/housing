@@ -10,7 +10,6 @@ with open("data/options.json", "r") as f:
     options = json.load(f)
 
 app = Flask(__name__)
-app.config.from_pyfile("config.py")
 
 app.model_columns = options["column order"]
 app.categorical_features = options["categorical features"]
