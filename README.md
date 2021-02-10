@@ -71,15 +71,18 @@ Staging
 - [x] Implement SHAP and see how it looks (not really more interpretable, but faster)
 - [x] Write a test that asserts that the page loads, and doesn't break when you estimate on a test case
 
-Docker
+Heroku
 
-- [x] structure and run the flask app as a package
-- [x] Add configuration files to the production environment (app and ml)
-- [x] Generate first-use data dependencies (run transform and train)
-- [ ] Write a Dockerfile
-- [ ] Write a startup script
-- [ ] See if it works, debug if not
-- [ ] setup the cron scripts (transform and train) and one-off test them (try logging?)
+[ ] see if you can upload CSV and train on server start
+
+[ ] Migrate DO Mongo DB to Mongo Atlas (Cloud)
+
+[ ] Point extract_load.py to Atlas
+
+[ ] Point transform.py and train.py to S3
+[ ] On server start, download model from S3
+
+[ ] Setup recurring process to retrain model
 
 CircleCI
 
