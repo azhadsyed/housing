@@ -1,8 +1,8 @@
 .vscode/
 notebooks/
 *.csv
-*.json
-*.joblib
+# *.json
+# *.joblib
 __pycache__
 *.pytest_cache
 *.bat
