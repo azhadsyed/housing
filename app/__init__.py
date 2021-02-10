@@ -25,7 +25,6 @@ app.feature_names = app.model.steps[0][1].get_feature_names()
 app.explainer = shap.TreeExplainer(app.model.steps[1][1])
 
 app.nominatim = Nominatim(user_agent="nyc_rent_estimator")
-app.all_hands_on_deck = pickle.load(open("data/geopy_mock_response.pkl", "rb"))
 
 app.ti_enabled = False
 

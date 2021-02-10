@@ -7,13 +7,9 @@ from treeinterpreter import treeinterpreter as ti
 @cache(maxsize=200)
 def geocode_address(address):
     """Accepts an address string, returns a tuple of latitude and longitude"""
-    try:
-        response = app.nominatim.geocode(address)
-        print("API UP")
-        return response
-    except:
-        print("API DOWN")
-        return app.all_hands_on_deck
+    response = app.nominatim.geocode(address)
+    print("API UP")
+    return response
 
 
 def form_data_to_dataframe(form_data):
