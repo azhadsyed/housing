@@ -1,6 +1,6 @@
 .vscode/
 notebooks/
-*.csv
+# *.csv
 # *.json
 # *.joblib
 __pycache__
