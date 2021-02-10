@@ -25,37 +25,47 @@ from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import OneHotEncoder
 
 
-np.set_printoptions(threshold=np.inf)
-pd.set_option("display.max_columns", None)
+class RandomForestModel:
+    def train_random_forest(self, csv: str, target: str, also_drop: list):
+        # 0. Read the data
+        data = pd.read_csv(csv)
+        categorical_features: list = data.dtypes[data.dtypes == "object"].index.values
+        X_drop = []
+        X_drop.append(target)
+        X_drop.extend(also_drop)
 
-# 0. Read the data
-data = pd.read_csv("data/data.csv")
+        # 1. Split the data
+        X = data.drop(X_drop, axis=1, inplace=False)
+        y = data[target]
+        X_train, self.X_test, y_train, self.y_test = train_test_split(
+            X, y, test_size=0.2
+        )
 
-# ["housing_type", "laundry", "parking"]
-categorical_features = data.dtypes[data.dtypes == "object"].index.values
+        # 2. preprocess the features for training
+        ct = make_column_transformer(
+            (
+                OneHotEncoder(handle_unknown="ignore"),
+                categorical_features,
+            ),
+            remainder="passthrough",
+        )
+        rf = RandomForestRegressor()
 
-# 1. Split the data
-X = data.drop(["price", "id"], axis=1, inplace=False)
-y = data["price"]
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+        # 3. Fit and score the model
+        self.model = make_pipeline(ct, rf)
+        self.model.fit(X_train, y_train)
 
-# 2. preprocess the features for training
-ct = make_column_transformer(
-    (
-        OneHotEncoder(handle_unknown="ignore"),
-        categorical_features,
-    ),
-    remainder="passthrough",
-)
-rf = RandomForestRegressor()
 
-# 3. Fit and score the model
-model = make_pipeline(ct, rf)
-model.fit(X_train, y_train)
+if __name__ == "__main__":
+    np.set_printoptions(threshold=np.inf)
+    pd.set_option("display.max_columns", None)
 
-predictions = model.predict(X_test)
-error = abs(predictions - y_test)
-print(error.describe())
+    rfm = RandomForestModel()
+    rfm.train_random_forest("data/data.csv", "price", ["id"])
 
-# 4. Cache the model for downstream use
-dump(model, open("data/model.joblib", "wb"))
+    predictions = rfm.model.predict(rfm.X_test)
+    error = abs(predictions - rfm.y_test)
+    print(error.describe())
+
+    # 4. Cache the model for downstream use
+    dump(rfm.model, open("data/model.joblib", "wb"))
