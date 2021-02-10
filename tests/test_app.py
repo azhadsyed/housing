@@ -4,7 +4,7 @@ from unittest.mock import patch
 import pytest
 from app import app, utils
 
-geopy_mock_response = pickle.load(open("data/geopy_mock_response.pkl", "rb"))
+geopy_mock_response = pickle.load(open(".data/geopy_mock_response.pkl", "rb"))
 
 
 @pytest.fixture(scope="module")

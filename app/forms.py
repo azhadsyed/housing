@@ -10,7 +10,7 @@ from wtforms import (
 )
 from wtforms.validators import InputRequired, ValidationError
 
-with open("data/options.json", "r") as f:
+with open(".data/options.json", "r") as f:
     options = json.load(f)
 
 laundry_choices = options["laundry"]

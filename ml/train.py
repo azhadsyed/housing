@@ -61,11 +61,11 @@ if __name__ == "__main__":
     pd.set_option("display.max_columns", None)
 
     rfm = RandomForestModel()
-    rfm.train_random_forest("data/data.csv", "price", ["id"])
+    rfm.train_random_forest(".data/data.csv", "price", ["id"])
 
     predictions = rfm.model.predict(rfm.X_test)
     error = abs(predictions - rfm.y_test)
     print(error.describe())
 
     # 4. Cache the model for downstream use
-    dump(rfm.model, open("data/model.joblib", "wb"))
+    dump(rfm.model, open(".data/model.joblib", "wb"))

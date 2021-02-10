@@ -8,7 +8,7 @@ from geopy.geocoders import Nominatim
 
 from ml.train import RandomForestModel
 
-with open("data/options.json", "r") as f:
+with open(".data/options.json", "r") as f:
     options = json.load(f)
 
 app = Flask(__name__)
@@ -18,7 +18,7 @@ app.categorical_features = options["categorical features"]
 
 print("geez louise")
 rfm = RandomForestModel()
-rfm.train_random_forest("data/data.csv", "price", ["id"])
+rfm.train_random_forest(".data/data.csv", "price", ["id"])
 
 app.model = rfm.model
 app.feature_names = app.model.steps[0][1].get_feature_names()
