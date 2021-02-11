@@ -8,7 +8,6 @@ from treeinterpreter import treeinterpreter as ti
 def geocode_address(address):
     """Accepts an address string, returns a tuple of latitude and longitude"""
     response = app.nominatim.geocode(address)
-    print("API UP")
     return response
 
 

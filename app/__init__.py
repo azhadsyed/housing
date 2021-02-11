@@ -16,7 +16,6 @@ app = Flask(__name__)
 app.model_columns = options["column order"]
 app.categorical_features = options["categorical features"]
 
-print("geez louise")
 rfm = RandomForestModel()
 rfm.train_random_forest(".data/data.csv", "price", ["id"])
 
