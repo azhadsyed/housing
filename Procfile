@@ -1,1 +1,1 @@
-web: GUNICORN_CMD_ARGS="--workers 3 --timeout 90" gunicorn app:app
+web: gunicorn app:app
