@@ -15,6 +15,7 @@ import os
 import pickle
 from statistics import mean
 
+
 import numpy as np
 import pandas as pd
 from joblib import dump
@@ -54,18 +55,3 @@ class RandomForestModel:
         # 3. Fit and score the model
         self.model = make_pipeline(ct, rf)
         self.model.fit(X_train, y_train)
-
-
-if __name__ == "__main__":
-    np.set_printoptions(threshold=np.inf)
-    pd.set_option("display.max_columns", None)
-
-    rfm = RandomForestModel()
-    rfm.train_random_forest(".data/data.csv", "price", ["id"])
-
-    predictions = rfm.model.predict(rfm.X_test)
-    error = abs(predictions - rfm.y_test)
-    print(error.describe())
-
-    # 4. Cache the model for downstream use
-    dump(rfm.model, open(".data/model.joblib", "wb"))
