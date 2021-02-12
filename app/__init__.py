@@ -16,16 +16,24 @@ if os.path.exists(".env"):
 key_id = os.environ["AWS_ACCESS_KEY_ID"]
 secret_key = os.environ["AWS_SECRET_KEY"]
 
-s3 = boto3.client("s3", aws_access_key_id=key_id, aws_secret_access_key=secret_key)
 
 with open(".data/options.json", "r") as f:
     options = json.load(f)
 
 app = Flask(__name__)
 
-with tempfile.TemporaryFile() as fp:
-    s3.download_fileobj("nycestimator", "model.joblib", fp)
-    app.model = load(fp)
+from io import BytesIO
+
+print("connect")
+s3 = boto3.resource("s3", aws_access_key_id=key_id, aws_secret_access_key=secret_key)
+bucket_str = "nycestimator"
+bucket_key = "model.joblib"
+with BytesIO() as data:
+    print("download")
+    s3.Bucket(bucket_str).download_fileobj(bucket_key, data)
+    data.seek(0)
+    print("load into RAM")
+    app.model = load(data)
 
 app.model_columns = options["column order"]
 app.categorical_features = options["categorical features"]
