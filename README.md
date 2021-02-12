@@ -73,15 +73,12 @@ Staging
 
 Heroku
 
-[ ] see if you can upload CSV and train on server start
-
+[x] see if you can upload CSV and train on server start
+[ ] Use a one-off dyno to save csv & model to S3
 [ ] Migrate DO Mongo DB to Mongo Atlas (Cloud)
-
 [ ] Point extract_load.py to Atlas
-
 [ ] Point transform.py and train.py to S3
 [ ] On server start, download model from S3
-
 [ ] Setup recurring process to retrain model
 
 CircleCI
