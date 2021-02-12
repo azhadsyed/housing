@@ -17,7 +17,9 @@ rfm = RandomForestModel()
 rfm.train_random_forest(".data/data.csv", "price", ["id"])
 
 # Cache the model to S3 for downstream use
-model_filename = "model.joblib"
+model_filename = (
+    "model_dev.joblib" if os.environ["FLASK_ENV"] == "development" else "model.joblib"
+)
 
 with tempfile.TemporaryFile() as fp:
     dump(rfm.model, fp)

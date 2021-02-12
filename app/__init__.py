@@ -27,7 +27,10 @@ from io import BytesIO
 print("connect")
 s3 = boto3.resource("s3", aws_access_key_id=key_id, aws_secret_access_key=secret_key)
 bucket_str = "nycestimator"
-bucket_key = "model.joblib"
+bucket_key = (
+    "model_dev.joblib" if os.environ["FLASK_ENV"] == "development" else "model.joblib"
+)
+
 with BytesIO() as data:
     print("download")
     s3.Bucket(bucket_str).download_fileobj(bucket_key, data)
@@ -43,3 +46,10 @@ app.nominatim = Nominatim(user_agent="nyc_rent_estimator")
 app.ti_enabled = False
 
 from app import views
+
+
+from pympler import summary, muppy
+
+all_objects = muppy.get_objects()
+sum1 = summary.summarize(all_objects)
+summary.print_(sum1)
