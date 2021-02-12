@@ -16,7 +16,7 @@ if os.path.exists(".env"):
 key_id = os.environ["AWS_ACCESS_KEY_ID"]
 secret_key = os.environ["AWS_SECRET_KEY"]
 
-s3 = boto3.resource("s3", aws_access_key_id=key_id, aws_secret_access_key=secret_key)
+s3 = boto3.client("s3", aws_access_key_id=key_id, aws_secret_access_key=secret_key)
 
 with open(".data/options.json", "r") as f:
     options = json.load(f)
