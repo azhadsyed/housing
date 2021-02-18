@@ -15,6 +15,8 @@ def form_data_to_dataframe(form_data):
     if "submit" in form_data.keys():
         del form_data["submit"]
 
+    form_data["address"] = form_data["address"] + " new york"
+
     location = geocode_address(form_data["address"])
 
     form_data["latitude"] = location.latitude
